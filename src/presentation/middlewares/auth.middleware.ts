@@ -11,18 +11,18 @@ export class AuthMiddleware {
 
     static async validateJWT(req: Request, res: Response, next: NextFunction) {
         const authorization = req.header('Authorization');
-        if (!authorization) res.status(401).json({ error: 'No token provided' });
-        if (!authorization?.startsWith('Bearer ')) res.status(401).json({ error: 'Invalid Bearer token' });
+        if (!authorization) return res.status(401).json({ error: 'No token provided' });
+        if (!authorization?.startsWith('Bearer ')) return res.status(401).json({ error: 'Invalid Bearer token' });
 
         const token = authorization?.split(' ').at(1);
 
         try {
 
             const payload = await JwtAdapter.validateToken<{ id: string }>(token!);
-            if (!payload) res.status(401).json({ error: 'Invalid token' });
+            if (!payload) return res.status(401).json({ error: 'Invalid token' });
 
             const user = await UserModel.findById(payload!.id);
-            if (!user) res.status(401).json({ error: 'Invalid token - user' });
+            if (!user) return res.status(401).json({ error: 'Invalid token - user' });
 
             req.body.user = UserEntity.fromObject(user!);
 
