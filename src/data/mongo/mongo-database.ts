@@ -1,28 +1,27 @@
 import mongoose from "mongoose";
 
-
 interface Options {
-    mongoUrl: string;
-    dbName: string;
+  mongoUrl: string;
+  dbName: string;
 }
 
 export class MongoDatabase {
-    static async connect(options: Options) {
-        const {mongoUrl, dbName} = options;
+  static async connect(options: Options) {
+    const { mongoUrl, dbName } = options;
 
-        try {
-            await mongoose.connect(mongoUrl, {
-                dbName: dbName,
-            });
-            
-            return true;
-        } catch (error) {
-            console.log('Mongo connection error');
-            throw error;
-        }
-    }
+    try {
+      await mongoose.connect(mongoUrl, {
+        dbName: dbName,
+      });
 
-    static async disconnect() {
-        await mongoose.disconnect();
+      return true;
+    } catch (error) {
+      console.log("Mongo connection error");
+      throw error;
     }
+  }
+
+  static async disconnect() {
+    await mongoose.disconnect();
+  }
 }
